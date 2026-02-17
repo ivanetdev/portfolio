@@ -12,6 +12,42 @@ body {
     border-radius: 10px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
+/* Responsive Design */
+@media (max-width: 900px) {
+    .container {
+        max-width: 95%;
+        padding: 20px 10px;
+    }
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 0;
+    }
+    .container {
+        margin: 10px auto;
+        padding: 10px 2vw;
+        border-radius: 0;
+        box-shadow: none;
+    }
+    h1 {
+        font-size: 1.3em;
+    }
+    #postForm input[type="text"],
+    #postForm textarea {
+        font-size: 1em;
+    }
+    .post {
+        padding: 10px 5px;
+    }
+    .post-title {
+        font-size: 1em;
+    }
+    .post-actions {
+        top: 5px;
+        right: 5px;
+    }
+}
 h1 {
     text-align: center;
     color: #333;
