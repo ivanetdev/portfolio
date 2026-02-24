@@ -1,23 +1,76 @@
-// Utiliza localStorage para guardar los posts
-function getPosts() {
-    return JSON.parse(localStorage.getItem('portfolioPosts') || '[]');
+// ── IndexedDB ──────────────────────────────────────────────
+const DB_NAME = 'portfolioDB';
+const STORE_NAME = 'posts';
+
+function openDB() {
+    return new Promise((resolve, reject) => {
+        const req = indexedDB.open(DB_NAME, 1);
+        req.onupgradeneeded = e => {
+            e.target.result.createObjectStore(STORE_NAME, { keyPath: 'id', autoIncrement: true });
+        };
+        req.onsuccess = e => resolve(e.target.result);
+        req.onerror = e => reject(e);
+    });
 }
 
-function savePosts(posts) {
-    localStorage.setItem('portfolioPosts', JSON.stringify(posts));
+async function getPosts() {
+    const db = await openDB();
+    return new Promise((resolve, reject) => {
+        const req = db.transaction(STORE_NAME, 'readonly')
+                      .objectStore(STORE_NAME)
+                      .getAll();
+        req.onsuccess = () => resolve(req.result.reverse()); // más reciente primero
+        req.onerror = reject;
+    });
 }
 
-function renderPosts() {
-    const posts = getPosts();
+async function addPost(post) {
+    const db = await openDB();
+    return new Promise((resolve, reject) => {
+        const req = db.transaction(STORE_NAME, 'readwrite')
+                      .objectStore(STORE_NAME)
+                      .add(post);
+        req.onsuccess = resolve;
+        req.onerror = reject;
+    });
+}
+
+async function updatePost(id, changes) {
+    const db = await openDB();
+    const store = db.transaction(STORE_NAME, 'readwrite').objectStore(STORE_NAME);
+    return new Promise((resolve, reject) => {
+        const getReq = store.get(id);
+        getReq.onsuccess = () => {
+            const updated = { ...getReq.result, ...changes };
+            store.put(updated).onsuccess = resolve;
+        };
+        getReq.onerror = reject;
+    });
+}
+
+async function deletePostById(id) {
+    const db = await openDB();
+    return new Promise((resolve, reject) => {
+        const req = db.transaction(STORE_NAME, 'readwrite')
+                      .objectStore(STORE_NAME)
+                      .delete(id);
+        req.onsuccess = resolve;
+        req.onerror = reject;
+    });
+}
+
+// ── Render ─────────────────────────────────────────────────
+async function renderPosts() {
+    const posts = await getPosts();
     const postsDiv = document.getElementById('posts');
     postsDiv.innerHTML = '';
-    posts.forEach((post, idx) => {
+    posts.forEach(post => {
         const postDiv = document.createElement('div');
         postDiv.className = 'post';
         postDiv.innerHTML = `
             <div class="post-actions">
-                <button class="edit" onclick="editPost(${idx})">Editar</button>
-                <button class="delete" onclick="deletePost(${idx})">Borrar</button>
+                <button class="edit"   onclick="editPost(${post.id})">Editar</button>
+                <button class="delete" onclick="deletePost(${post.id})">Borrar</button>
             </div>
             <div class="post-title">${post.title}</div>
             <div class="post-description">${post.description}</div>
@@ -27,23 +80,18 @@ function renderPosts() {
     });
 }
 
-function handleFormSubmit(e) {
+// ── Formulario ─────────────────────────────────────────────
+async function handleFormSubmit(e) {
     e.preventDefault();
-    const title = document.getElementById('title').value.trim();
+    const title       = document.getElementById('title').value.trim();
     const description = document.getElementById('description').value.trim();
-    const imageInput = document.getElementById('image');
-    const file = imageInput.files[0];
+    const file        = document.getElementById('image').files[0];
     if (!file) return;
+
     const reader = new FileReader();
-    reader.onload = function(evt) {
-        const posts = getPosts();
-        posts.unshift({
-            title,
-            description,
-            image: evt.target.result
-        });
-        savePosts(posts);
-        renderPosts();
+    reader.onload = async function(evt) {
+        await addPost({ title, description, image: evt.target.result });
+        await renderPosts();
         document.getElementById('postForm').reset();
     };
     reader.readAsDataURL(file);
@@ -51,27 +99,26 @@ function handleFormSubmit(e) {
 
 document.getElementById('postForm').addEventListener('submit', handleFormSubmit);
 
-function editPost(idx) {
-    const posts = getPosts();
-    const post = posts[idx];
+// ── Editar / Borrar ────────────────────────────────────────
+async function editPost(id) {
+    const posts = await getPosts();
+    const post  = posts.find(p => p.id === id);
+    if (!post) return;
+
     const title = prompt('Editar título:', post.title);
     if (title === null) return;
     const description = prompt('Editar descripción:', post.description);
     if (description === null) return;
-    // Imagen no editable por simplicidad
-    posts[idx].title = title.trim();
-    posts[idx].description = description.trim();
-    savePosts(posts);
-    renderPosts();
+
+    await updatePost(id, { title: title.trim(), description: description.trim() });
+    await renderPosts();
 }
 
-function deletePost(idx) {
+async function deletePost(id) {
     if (!confirm('¿Seguro que quieres borrar este trabajo?')) return;
-    const posts = getPosts();
-    posts.splice(idx, 1);
-    savePosts(posts);
-    renderPosts();
+    await deletePostById(id);
+    await renderPosts();
 }
 
-// Inicializar
+// ── Inicializar ────────────────────────────────────────────
 renderPosts();
