@@ -5,22 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Works 2026 Portfolio</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="favicon.ico">
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <h1>Works 2026 Portfolio</h1>
-        <form id="postForm">
-            <input type="text" id="title" placeholder="Título del trabajo" required>
-            <textarea id="description" placeholder="Descripción" required></textarea>
-            <input type="file" id="image" accept="image/*" required>
-            <button type="submit">Subir trabajo</button>
-        </form>
-        <div id="posts"></div>
-        
-    </div>
-        
+    <header class="site-header">
+        <div class="header-inner">
+            <span class="logo">Portfolio <em>2026</em></span>
+            <nav>
+                <a href="index.html" class="active">Works</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="hero">
+            <h1>Trabajos<br><span class="accent">& Proyectos</span></h1>
+            <p class="subtitle">Desarrollo frontend · JEE · Fullstack</p>
+        </div>
+        <div id="posts" class="posts-grid">
+            <div class="loading">Cargando trabajos...</div>
+        </div>
+    </main>
+
     <script src="script.js"></script>
 </body>
 </html>

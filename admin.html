@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin · Works 2026</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body class="admin-body">
+    <header class="site-header">
+        <div class="header-inner">
+            <span class="logo">Portfolio <em>2026</em></span>
+            <nav>
+                <a href="index.html">Ver Portfolio</a>
+                <a href="admin.html" class="active">Admin</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="hero">
+            <h1>Panel <span class="accent">Admin</span></h1>
+            <p class="subtitle">Gestiona tus trabajos y exporta el JSON</p>
+        </div>
+
+        <!-- FORMULARIO -->
+        <section class="admin-card">
+            <h2 id="form-title">➕ Añadir trabajo</h2>
+            <form id="postForm">
+                <input type="hidden" id="editId">
+                <div class="form-group">
+                    <label>Título del proyecto *</label>
+                    <input type="text" id="title" placeholder="Ej: E-commerce con React" required>
+                </div>
+                <div class="form-group">
+                    <label>Descripción *</label>
+                    <textarea id="description" placeholder="Describe el proyecto, tecnologías usadas, tu rol..." rows="4" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Tags (separados por comas)</label>
+                    <input type="text" id="tags" placeholder="Ej: React, Node.js, MySQL">
+                </div>
+                <div class="form-group">
+                    <label>URL del proyecto / demo</label>
+                    <input type="url" id="link" placeholder="https://...">
+                </div>
+                <div class="form-group">
+                    <label>Imagen del proyecto</label>
+                    <input type="file" id="image" accept="image/*">
+                    <div id="imagePreview" class="image-preview hidden"></div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary" id="submitBtn">Añadir trabajo</button>
+                    <button type="button" class="btn-cancel hidden" id="cancelBtn" onclick="cancelEdit()">Cancelar</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- EXPORTAR -->
+        <section class="export-card">
+            <div class="export-info">
+                <h2>📦 Exportar posts.json</h2>
+                <p>Cuando hayas terminado de editar, exporta el archivo y súbelo a tu repositorio de GitHub.</p>
+            </div>
+            <button class="btn-export" onclick="exportJSON()">⬇️ Descargar posts.json</button>
+        </section>
+
+        <!-- LISTA DE POSTS -->
+        <section>
+            <h2>📋 Trabajos actuales (<span id="postCount">0</span>)</h2>
+            <div id="posts" class="posts-grid"></div>
+        </section>
+    </main>
+
+    <script src="admin.js"></script>
+</body>
+</html>
