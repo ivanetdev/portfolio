@@ -88,7 +88,20 @@ document.getElementById('postForm').addEventListener('submit', async function (e
     const processImage = (callback) => {
         if (file) {
             const reader = new FileReader();
-            reader.onload = (e) => callback(e.target.result);
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const MAX = 800;
+                    let w = img.width, h = img.height;
+                    if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
+                    if (h > MAX) { w = Math.round(w * MAX / h); h = MAX; }
+                    canvas.width = w; canvas.height = h;
+                    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                    callback(canvas.toDataURL('image/jpeg', 0.7)); // comprime al 70%
+                };
+                img.src = e.target.result;
+            };
             reader.readAsDataURL(file);
         } else {
             callback(null);
