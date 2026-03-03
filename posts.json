@@ -20,6 +20,16 @@
     ],
     "link": "https://github.com/ivanetdev/proyectoWeb"
   },
+    {
+    "id": "mm9myt38roe4m",
+    "title": "retoJuego",
+    "description": "Aplicación web de un juego de memoria desarrollada con JavaScript, donde el usuario debe encontrar las parejas de cartas en el menor tiempo posible.",
+    "date": "2 de marzo de 2026",
+    "tags": [
+      "HTML5 CSS3 JavaScript (Vanilla JS) GitHub Pages"
+    ],
+    "link": "https://ivanetdev.github.io/retoJuego/"
+  },
   {
     "id": "mm9n7607ydiui",
     "title": "portfolio",
@@ -29,15 +39,5 @@
       "HTML5 - CSS3 - JavaScript (Vanilla JS) - GitHub Pages"
     ],
     "link": "https://ivanetdev.github.io/portfolio/"
-  },
-  {
-    "id": "mm9myt38roe4m",
-    "title": "retoJuego",
-    "description": "Aplicación web de un juego de memoria desarrollada con JavaScript, donde el usuario debe encontrar las parejas de cartas en el menor tiempo posible.",
-    "date": "2 de marzo de 2026",
-    "tags": [
-      "HTML5 CSS3 JavaScript (Vanilla JS) GitHub Pages"
-    ],
-    "link": "https://ivanetdev.github.io/retoJuego/"
   }
 ]
