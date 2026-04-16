@@ -9,7 +9,6 @@ Portfolio personal de proyectos de desarrollo, con panel de administración y pu
 ```
 portfolio/
 ├── index.html     → Portfolio público (lo que ve todo el mundo)
-├── admin.html     → Panel de administración (solo tú)
 ├── script.js      → Carga y renderiza los proyectos desde posts.json
 ├── admin.js       → Lógica del panel admin
 ├── style.css      → Estilos globales
